@@ -14,11 +14,149 @@ Include a UML class diagram of your initial design for this assignment. If you a
 
 Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.
 
+```mermaid
+classDiagram
+    class BoardGame {
+        -String name
+        -int id
+        -int minPlayers
+        -int maxPlayers
+        -int minPlayTime
+        -int maxPlayTime
+        -double difficulty
+        -int rank
+        -double averageRating
+        -int yearPublished
+        +getName() String
+        +getId() int
+        +getMinPlayers() int
+        +getMaxPlayers() int
+        +getMinPlayTime() int
+        +getMaxPlayTime() int
+        +getDifficulty() double
+        +getRank() int
+        +getRating() double
+        +getYearPublished() int
+        +toStringWithInfo(GameData) String
+        +equals(Object) boolean
+        +hashCode() int
+        +toString() String
+    }
 
+    class GameData {
+        <<enumeration>>
+        NAME
+        ID
+        RATING
+        DIFFICULTY
+        RANK
+        MIN_PLAYERS
+        MAX_PLAYERS
+        MIN_TIME
+        MAX_TIME
+        YEAR
+        +getColumnName() String
+        +fromColumnName(String)$ GameData
+        +fromString(String)$ GameData
+    }
+
+    class Operations {
+        <<enumeration>>
+        EQUALS
+        NOT_EQUALS
+        GREATER_THAN
+        LESS_THAN
+        GREATER_THAN_EQUALS
+        LESS_THAN_EQUALS
+        CONTAINS
+        +getOperator() String
+        +fromOperator(String)$ Operations
+        +getOperatorFromStr(String)$ Operations
+    }
+
+    class GamesLoader {
+        <<utility>>
+        +loadGamesFile(String)$ Set~BoardGame~
+    }
+
+    class IGameList {
+        <<interface>>
+        +ADD_ALL$ String
+        +getGameNames() List~String~
+        +clear() void
+        +count() int
+        +saveGame(String) void
+        +addToList(String, Stream~BoardGame~) void
+        +removeFromList(String) void
+    }
+
+    class IPlanner {
+        <<interface>>
+        +filter(String) Stream~BoardGame~
+        +filter(String, GameData) Stream~BoardGame~
+        +filter(String, GameData, boolean) Stream~BoardGame~
+        +reset() void
+    }
+
+    class GameList {
+        +GameList()
+    }
+
+    class Planner {
+        +Planner(Set~BoardGame~)
+    }
+
+    GameList ..|> IGameList
+    Planner ..|> IPlanner
+    GamesLoader ..> BoardGame
+    BoardGame ..> GameData
+```
 
 ### Your Plans/Design
 
-Create a class diagram for the classes you plan to create. This is your initial design, and it is okay if it changes. Your starting points are the interfaces. 
+Create a class diagram for the classes you plan to create. This is your initial design, and it is okay if it changes. Your starting points are the interfaces.
+
+```mermaid
+classDiagram
+    class GameList {
+        -List~BoardGame~ games
+        +GameList()
+        +getGameNames() List~String~
+        +clear() void
+        +count() int
+        +saveGame(String) void
+        +addToList(String, Stream~BoardGame~) void
+        +removeFromList(String) void
+    }
+
+    class Planner {
+        -Set~BoardGame~ allGames
+        -List~BoardGame~ filtered
+        +Planner(Set~BoardGame~)
+        +filter(String) Stream~BoardGame~
+        +filter(String, GameData) Stream~BoardGame~
+        +filter(String, GameData, boolean) Stream~BoardGame~
+        +reset() void
+    }
+
+    class Filter {
+        <<utility>>
+        +stringFilter(Stream~BoardGame~, GameData, Operations, String)$ Stream~BoardGame~
+        +numberFilter(Stream~BoardGame~, GameData, Operations, double)$ Stream~BoardGame~
+    }
+
+    class IGameList {
+        <<interface>>
+    }
+
+    class IPlanner {
+        <<interface>>
+    }
+
+    GameList ..|> IGameList
+    Planner ..|> IPlanner
+    Planner ..> Filter
+```
 
 
 
@@ -38,8 +176,26 @@ Write a test (in english) that you can picture for the class diagram you have cr
 
 You should feel free to number your brainstorm. 
 
-1. Test 1..
-2. Test 2..
+#### GameList Tests
+
+1. A new `GameList` starts with a count of 0 and an empty name list.
+2. `addToList("all", filtered)` adds every game from the stream.
+3. `addToList` with a game name adds only that game.
+4. `addToList` with a number adds the game at that position.
+5. `addToList` with a range adds games 1 through n.
+6. `addToList` does not add duplicates.
+7. `removeFromList("all")` clears the list.
+8. `removeFromList` with a name removes only that game.
+9. `clear()` resets count to 0.
+
+#### Planner Tests
+
+10. `filter("")` returns all games sorted by name.
+11. `filter("name==Go")` returns only games with that exact name.
+12. `filter("name~=go")` returns games whose name contains "go".
+13. `filter("minPlayers>4")` returns only games with minPlayers > 4.
+14. `filter("minPlayers>2,maxPlayers<6")` applies both conditions together.
+15. Calling `filter` twice without `reset()` narrows results further.
 
 
 
