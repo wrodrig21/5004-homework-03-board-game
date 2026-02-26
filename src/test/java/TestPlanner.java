@@ -53,6 +53,24 @@ public class TestPlanner {
         assertEquals(games.size(), result.size());
     }
 
+    @Test
+    public void testSortByRatingAscending() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("", GameData.RATING).toList();
+        assertEquals(games.size(), result.size());
+        // lowest rating first
+        assertEquals("Monopoly", result.get(0).getName());
+    }
+
+    @Test
+    public void testSortByRankDescending() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("", GameData.RANK, false).toList();
+        assertEquals(games.size(), result.size());
+        // highest rank number first (worst ranked)
+        assertEquals("Monopoly", result.get(0).getName());
+    }
+
     // @Test
     // public void testFilterName() {
     //     IPlanner planner = new Planner(games);
