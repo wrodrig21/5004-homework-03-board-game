@@ -61,7 +61,47 @@ public class Planner implements IPlanner {
      */
     @Override
     public Stream<BoardGame> filter(String filter, GameData sortOn, boolean ascending) {
-        return applySort(filtered.stream(), sortOn, ascending);
+        if (filter != null && !filter.trim().isEmpty()) {
+            filtered = filterSingle(filter.trim(), filtered.stream()).toList();
+        }
+        Comparator<BoardGame> comp;
+        switch (sortOn) {
+            case RATING: comp = Comparator.comparingDouble(BoardGame::getRating); break;
+            case DIFFICULTY: comp = Comparator.comparingDouble(BoardGame::getDifficulty); break;
+            case RANK: comp = Comparator.comparingInt(BoardGame::getRank); break;
+            case MIN_PLAYERS: comp = Comparator.comparingInt(BoardGame::getMinPlayers); break;
+            case MAX_PLAYERS: comp = Comparator.comparingInt(BoardGame::getMaxPlayers); break;
+            case MIN_TIME: comp = Comparator.comparingInt(BoardGame::getMinPlayTime); break;
+            case MAX_TIME: comp = Comparator.comparingInt(BoardGame::getMaxPlayTime); break;
+            case YEAR: comp = Comparator.comparingInt(BoardGame::getYearPublished); break;
+            default: comp = Comparator.comparing(BoardGame::getName, String.CASE_INSENSITIVE_ORDER); break;
+        }
+        if (!ascending) comp = comp.reversed();
+        return filtered.stream().sorted(comp);
+    }
+
+    private Stream<BoardGame> filterSingle(String filter, Stream<BoardGame> filteredGames) {
+        Operations operator = Operations.getOperatorFromStr(filter);
+        if (operator == null) return filteredGames;
+        filter = filter.replaceAll(" ", "");
+        String[] parts = filter.split(operator.getOperator());
+        if (parts.length != 2) return filteredGames;
+        GameData column;
+        try {
+            column = GameData.fromString(parts[0]);
+        } catch (IllegalArgumentException e) {
+            return filteredGames;
+        }
+        String value = parts[1];
+        if (column == GameData.NAME) {
+            return Filter.stringFilter(filteredGames, column, operator, value);
+        }
+        try {
+            double num = Double.parseDouble(value);
+            return Filter.numberFilter(filteredGames, column, operator, num);
+        } catch (NumberFormatException e) {
+            return filteredGames;
+        }
     }
 
 

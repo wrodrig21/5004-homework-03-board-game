@@ -71,12 +71,12 @@ public class TestPlanner {
         assertEquals("Monopoly", result.get(0).getName());
     }
 
-    // @Test
-    // public void testFilterName() {
-    //     IPlanner planner = new Planner(games);
-    //     List<BoardGame> filtered = planner.filter("name == Go").toList();
-    //     assertEquals(1, filtered.size());
-    //     assertEquals("Go", filtered.get(0).getName());
-    // }
+    @Test
+    public void testFilterName() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> filtered = planner.filter("name == Go").toList();
+        assertEquals(1, filtered.size());
+        assertEquals("Go", filtered.get(0).getName());
+    }
 
 }
