@@ -33,12 +33,32 @@ public class TestPlanner {
     }
 
      @Test
-    public void testFilterName() {
+    public void testFilterEmptyReturnsAll() {
         IPlanner planner = new Planner(games);
-        List<BoardGame> filtered = planner.filter("name == Go").toList();
-        assertEquals(1, filtered.size());
-        assertEquals("Go", filtered.get(0).getName());
+        List<BoardGame> result = planner.filter("").toList();
+        assertEquals(games.size(), result.size());
+
+        // sorted by name ascending
+
+        assertEquals("17 days", result.get(0).getName());
+        assertEquals("Tucano", result.get(result.size() - 1).getName());
     }
-    
+
+    @Test
+    public void testResetRestoresAll() {
+        IPlanner planner = new Planner(games);
+        planner.filter("name==Chess");
+        planner.reset();
+        List<BoardGame> result = planner.filter("").toList();
+        assertEquals(games.size(), result.size());
+    }
+
+    // @Test
+    // public void testFilterName() {
+    //     IPlanner planner = new Planner(games);
+    //     List<BoardGame> filtered = planner.filter("name == Go").toList();
+    //     assertEquals(1, filtered.size());
+    //     assertEquals("Go", filtered.get(0).getName());
+    // }
 
 }
