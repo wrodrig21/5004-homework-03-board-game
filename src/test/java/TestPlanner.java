@@ -79,4 +79,11 @@ public class TestPlanner {
         assertEquals("Go", filtered.get(0).getName());
     }
 
+    @Test
+    public void testFilterNameContains() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("name ~= go").toList();
+        assertEquals(4, result.size());
+    }
+
 }
