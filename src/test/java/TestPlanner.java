@@ -100,4 +100,18 @@ public class TestPlanner {
         assertEquals(2, result.size());
     }
 
+    @Test
+    public void testFilterMinPlayersGTE() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("minPlayers >= 6").toList();
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    public void testFilterDifficultyLTE() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("difficulty <= 4").toList();
+        assertEquals(2, result.size());
+    }
+
 }
