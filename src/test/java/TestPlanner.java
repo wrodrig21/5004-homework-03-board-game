@@ -114,4 +114,19 @@ public class TestPlanner {
         assertEquals(2, result.size());
     }
 
+    @Test
+    public void testFilterRankEquals() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("rank == 100").toList();
+        assertEquals(1, result.size());
+        assertEquals("Go", result.get(0).getName());
+    }
+
+    @Test
+    public void testFilterRankNotEquals() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("rank != 100").toList();
+        assertEquals(7, result.size());
+    }
+
 }
