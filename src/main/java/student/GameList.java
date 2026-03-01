@@ -36,8 +36,7 @@ public class GameList implements IGameList {
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear'");
+        games.clear();
     }
 
     /**

@@ -44,4 +44,11 @@ public class TestGameList {
         assertEquals(3, list.count());
     }
 
+    @Test
+    public void testClearEmptiesList() {
+        list.addToList("all", sampleGames.stream());
+        list.clear();
+        assertEquals(0, list.count());
+    }
+
 }
