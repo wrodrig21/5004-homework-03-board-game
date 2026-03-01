@@ -62,7 +62,9 @@ public class Planner implements IPlanner {
     @Override
     public Stream<BoardGame> filter(String filter, GameData sortOn, boolean ascending) {
         if (filter != null && !filter.trim().isEmpty()) {
-            filtered = filterSingle(filter.trim(), filtered.stream()).toList();
+            for (String part : filter.split(",")) {
+                filtered = filterSingle(part.trim(), filtered.stream()).toList();
+            }
         }
         Comparator<BoardGame> comp;
         switch (sortOn) {

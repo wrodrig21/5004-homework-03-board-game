@@ -129,4 +129,12 @@ public class TestPlanner {
         assertEquals(7, result.size());
     }
 
+    @Test
+    public void testFilterMultipleConditions() {
+        IPlanner planner = new Planner(games);
+        List<BoardGame> result = planner.filter("minPlayers > 2, maxPlayers < 8").toList();
+        assertEquals(1, result.size());
+        assertEquals("GoRami", result.get(0).getName());
+    }
+
 }
