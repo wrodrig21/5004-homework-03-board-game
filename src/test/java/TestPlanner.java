@@ -137,4 +137,13 @@ public class TestPlanner {
         assertEquals("GoRami", result.get(0).getName());
     }
 
+    @Test
+    public void testProgressiveFilter() {
+        IPlanner planner = new Planner(games);
+        planner.filter("minPlayers > 2");
+        List<BoardGame> result = planner.filter("maxPlayers < 8").toList();
+        assertEquals(1, result.size());
+        assertEquals("GoRami", result.get(0).getName());
+    }
+
 }
