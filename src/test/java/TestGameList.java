@@ -60,10 +60,26 @@ public class TestGameList {
 
     @Test
     public void testAddByNumber() {
-        Stream<BoardGame> stream = sampleGames.stream()
-                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(a.getName(), b.getName()));
-        list.addToList("1", stream);
+        BoardGame a = new BoardGame("Catan", 1, 3, 4, 60, 120, 2.5, 10, 7.2, 1995);
+        BoardGame b = new BoardGame("Chess", 2, 2, 2, 10, 60, 3.5, 1, 8.5, 1475);
+        list.addToList("1", Stream.of(a, b));
         assertEquals(1, list.count());
+    }
+
+    @Test
+    public void testAddByRange() {
+        BoardGame a = new BoardGame("Catan", 1, 3, 4, 60, 120, 2.5, 10, 7.2, 1995);
+        BoardGame b = new BoardGame("Chess", 2, 2, 2, 10, 60, 3.5, 1, 8.5, 1475);
+        BoardGame c = new BoardGame("Go", 3, 2, 2, 30, 180, 4.0, 2, 8.2, 2000);
+        list.addToList("1-2", Stream.of(a, b, c));
+        assertEquals(2, list.count());
+    }
+
+    @Test
+    public void testNoDuplicates() {
+        list.addToList("all", sampleGames.stream());
+        list.addToList("all", sampleGames.stream());
+        assertEquals(3, list.count());
     }
 
 }

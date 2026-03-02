@@ -72,6 +72,13 @@ public class GameList implements IGameList {
             for (BoardGame g : filteredList) {
                 if (!games.contains(g)) games.add(g);
             }
+        } else if (str.matches("\\d+-\\d+")) {
+            String[] range = str.split("-");
+            int start = Integer.parseInt(range[0]) - 1;
+            int end = Math.min(Integer.parseInt(range[1]), filteredList.size());
+            for (int i = start; i < end; i++) {
+                if (!games.contains(filteredList.get(i))) games.add(filteredList.get(i));
+            }
         } else if (str.matches("\\d+")) {
             int i = Integer.parseInt(str) - 1;
             if (i >= 0 && i < filteredList.size() && !games.contains(filteredList.get(i))) {
