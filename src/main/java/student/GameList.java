@@ -69,15 +69,21 @@ public class GameList implements IGameList {
         str = str.trim();
 
         if (str.equalsIgnoreCase(ADD_ALL)) {
-            for (BoardGame game : filteredList) {
-                if (!games.contains(game)) {
-                    games.add(game);
+            for (BoardGame g : filteredList) {
+                if (!games.contains(g)) games.add(g);
+            }
+        } else if (str.matches("\\d+")) {
+            int i = Integer.parseInt(str) - 1;
+            if (i >= 0 && i < filteredList.size() && !games.contains(filteredList.get(i))) {
+                games.add(filteredList.get(i));
+            }
+        } else {
+            for (BoardGame g : filteredList) {
+                if (g.getName().equalsIgnoreCase(str) && !games.contains(g)) {
+                    games.add(g);
                 }
             }
-            return;
         }
-
-        throw new IllegalArgumentException("Invalid selector: " + str);
     }
 
     @Override

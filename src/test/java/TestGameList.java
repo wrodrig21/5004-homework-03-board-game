@@ -51,4 +51,19 @@ public class TestGameList {
         assertEquals(0, list.count());
     }
 
+    @Test
+    public void testAddByName() {
+        list.addToList("Chess", sampleGames.stream());
+        assertEquals(1, list.count());
+        assertEquals("Chess", list.getGameNames().get(0));
+    }
+
+    @Test
+    public void testAddByNumber() {
+        Stream<BoardGame> stream = sampleGames.stream()
+                .sorted((a, b) -> String.CASE_INSENSITIVE_ORDER.compare(a.getName(), b.getName()));
+        list.addToList("1", stream);
+        assertEquals(1, list.count());
+    }
+
 }
