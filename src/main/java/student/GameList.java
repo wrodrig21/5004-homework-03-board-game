@@ -51,8 +51,15 @@ public class GameList implements IGameList {
 
     @Override
     public void saveGame(String filename) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveGame'");
+        try {
+            java.io.PrintWriter pw = new java.io.PrintWriter(filename);
+            for (String name : getGameNames()) {
+                pw.println(name);
+            }
+            pw.close();
+        } catch (java.io.IOException e) {
+            // nothing
+        }
     }
 
     /**
