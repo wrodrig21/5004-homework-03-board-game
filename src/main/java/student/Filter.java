@@ -9,6 +9,7 @@ public class Filter {
         return games.filter(game -> {
             String actual = game.getName();
             if (op == Operations.EQUALS) return actual.equalsIgnoreCase(value);
+            if (op == Operations.NOT_EQUALS) return !actual.equalsIgnoreCase(value);
             if (op == Operations.CONTAINS) return actual.toLowerCase().contains(value.toLowerCase());
             return true;
         });
