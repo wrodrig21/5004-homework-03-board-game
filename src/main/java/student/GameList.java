@@ -95,8 +95,17 @@ public class GameList implements IGameList {
 
     @Override
     public void removeFromList(String str) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeFromList'");
+        str = str.trim();
+        if (str.equalsIgnoreCase(ADD_ALL)) {
+            games.clear();
+        } else {
+            for (int i = 0; i < games.size(); i++) {
+                if (games.get(i).getName().equalsIgnoreCase(str)) {
+                    games.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
 

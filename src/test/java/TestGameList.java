@@ -82,4 +82,18 @@ public class TestGameList {
         assertEquals(3, list.count());
     }
 
+    @Test
+    public void testRemoveAll() {
+        list.addToList("all", sampleGames.stream());
+        list.removeFromList("all");
+        assertEquals(0, list.count());
+    }
+
+    @Test
+    public void testRemoveByName() {
+        list.addToList("all", sampleGames.stream());
+        list.removeFromList("Chess");
+        assertEquals(2, list.count());
+    }
+
 }
