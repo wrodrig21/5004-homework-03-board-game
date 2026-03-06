@@ -22,14 +22,27 @@ public final class Filter {
             Operations op, String value) {
         return games.filter(game -> {
             String actual = game.getName();
+            int cmp = actual.compareToIgnoreCase(value);
             if (op == Operations.EQUALS) {
-                return actual.equalsIgnoreCase(value);
+                return cmp == 0;
             }
             if (op == Operations.NOT_EQUALS) {
-                return !actual.equalsIgnoreCase(value);
+                return cmp != 0;
             }
             if (op == Operations.CONTAINS) {
                 return actual.toLowerCase().contains(value.toLowerCase());
+            }
+            if (op == Operations.GREATER_THAN) {
+                return cmp > 0;
+            }
+            if (op == Operations.LESS_THAN) {
+                return cmp < 0;
+            }
+            if (op == Operations.GREATER_THAN_EQUALS) {
+                return cmp >= 0;
+            }
+            if (op == Operations.LESS_THAN_EQUALS) {
+                return cmp <= 0;
             }
             return true;
         });
