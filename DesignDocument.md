@@ -76,25 +76,25 @@ classDiagram
 
     class GamesLoader {
         <<utility>>
-        +loadGamesFile(String)$ Set~BoardGame~
+        +loadGamesFile(String)$ SetBoardGame 
     }
 
     class IGameList {
         <<interface>>
         +ADD_ALL$ String
-        +getGameNames() List~String~
+        +getGameNames() List String 
         +clear() void
         +count() int
         +saveGame(String) void
-        +addToList(String, Stream~BoardGame~) void
+        +addToList(String, Stream BoardGame ) void
         +removeFromList(String) void
     }
 
     class IPlanner {
         <<interface>>
-        +filter(String) Stream~BoardGame~
-        +filter(String, GameData) Stream~BoardGame~
-        +filter(String, GameData, boolean) Stream~BoardGame~
+        +filter(String) Stream BoardGame 
+        +filter(String, GameData) Stream BoardGame 
+        +filter(String, GameData, boolean) Stream BoardGame 
         +reset() void
     }
 
@@ -103,7 +103,7 @@ classDiagram
     }
 
     class Planner {
-        +Planner(Set~BoardGame~)
+        +Planner(Set BoardGame )
     }
 
     GameList ..|> IGameList
@@ -202,15 +202,128 @@ You should feel free to number your brainstorm.
 
 ## (FINAL DESIGN): Class Diagram
 
-Go through your completed code, and update your class diagram to reflect the final design. It is normal that the two diagrams don't match! Rarely (though possible) is your initial design perfect. 
+Go through your completed code, and update your class diagram to reflect the final design. It is normal that the two diagrams don't match! Rarely (though possible) is your initial design perfect.
 
-For the final design, you just need to do a single diagram that includes both the original classes and the classes you added. 
+For the final design, you just need to do a single diagram that includes both the original classes and the classes you added.
 
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
 
+```mermaid
+classDiagram
+    class BoardGame {
+        -String name
+        -int id
+        -int minPlayers
+        -int maxPlayers
+        -int minPlayTime
+        -int maxPlayTime
+        -double difficulty
+        -int rank
+        -double averageRating
+        -int yearPublished
+        +getName() String
+        +getId() int
+        +getMinPlayers() int
+        +getMaxPlayers() int
+        +getMinPlayTime() int
+        +getMaxPlayTime() int
+        +getDifficulty() double
+        +getRank() int
+        +getRating() double
+        +getYearPublished() int
+        +equals(Object) boolean
+        +hashCode() int
+        +toString() String
+    }
 
+    class GameData {
+        <<enumeration>>
+        NAME
+        RATING
+        DIFFICULTY
+        RANK
+        MIN_PLAYERS
+        MAX_PLAYERS
+        MIN_TIME
+        MAX_TIME
+        YEAR
+        +getColumnName() String
+        +fromString(String)$ GameData
+    }
 
+    class Operations {
+        <<enumeration>>
+        EQUALS
+        NOT_EQUALS
+        GREATER_THAN
+        LESS_THAN
+        GREATER_THAN_EQUALS
+        LESS_THAN_EQUALS
+        CONTAINS
+        +getOperator() String
+        +getOperatorFromStr(String)$ Operations
+    }
+
+    class GamesLoader {
+        <<utility>>
+        +loadGamesFile(String)$ Set~BoardGame~
+    }
+
+    class IGameList {
+        <<interface>>
+        +ADD_ALL$ String
+        +getGameNames() List~String~
+        +clear() void
+        +count() int
+        +saveGame(String) void
+        +addToList(String, Stream~BoardGame~) void
+        +removeFromList(String) void
+    }
+
+    class IPlanner {
+        <<interface>>
+        +filter(String) Stream~BoardGame~
+        +filter(String, GameData) Stream~BoardGame~
+        +filter(String, GameData, boolean) Stream~BoardGame~
+        +reset() void
+    }
+
+    class GameList {
+        -List~BoardGame~ games
+        +GameList()
+        +getGameNames() List~String~
+        +clear() void
+        +count() int
+        +saveGame(String) void
+        +addToList(String, Stream~BoardGame~) void
+        +removeFromList(String) void
+    }
+
+    class Planner {
+        -Set~BoardGame~ allGames
+        -List~BoardGame~ filtered
+        +Planner(Set~BoardGame~)
+        +filter(String) Stream~BoardGame~
+        +filter(String, GameData) Stream~BoardGame~
+        +filter(String, GameData, boolean) Stream~BoardGame~
+        +reset() void
+        -filterSingle(String, Stream~BoardGame~) Stream~BoardGame~
+    }
+
+    class Filter {
+        +stringFilter(Stream BoardGame, GameData, Operations, String)$ Stream BoardGame
+        +numberFilter(Stream BoardGame, GameData, Operations, double)$ Stream BoardGame
+    }
+
+    GameList ..> IGameList
+    Planner ..> IPlanner
+    Planner ..> Filter
+    Filter ..> Operations
+    Filter ..> GameData
+    GamesLoader ..> BoardGame
+    BoardGame ..> GameData
+```
 
 
 ## (FINAL DESIGN): Reflection/Retrospective
@@ -218,4 +331,8 @@ For the final design, you just need to do a single diagram that includes both th
 > [!IMPORTANT]
 > The value of reflective writing has been highly researched and documented within computer science, from learning to information to showing higher salaries in the workplace. For this next part, we encourage you to take time, and truly focus on your retrospective.
 
-Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two. 
+Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two.
+
+My initial design was pretty close to what I ended up with but there were a few things I didn't fully think about at the start. The biggest change was how complex the filter string parsing turned out to be. I knew I needed to support operators like == and >=, but definitly didn't realize how tricky it'd be to split the strings, especially >= and <=. It made the the order of checks in getOperatorFromStr really important which also was a pain to work through. I also underestimated how much work removeFromList would be. I originally only thought by removing by name and "all" would work, but the interface also requires removing by number and range, and throwing exceptions for invalid input. Adding that later was a bit messy and I wish I had planned for it upfront.
+
+The most challenging part was definitely the compounding filter logic in Planner. I had to keep track of the filtered list between calls and make sure reset() actually brought it back to the full set. I kept second guessing if it was actually working until I wrote tests that chained multiple filter calls together. The Filter utility class ended up being really helpful for keeping Planner working and the filterSingle method would have gotten way too long. If I did this again I'd spend more time thinking through all the edge cases before writing any code, instead of discovering them halfway through when the tests started failing.
