@@ -2,19 +2,48 @@ package student;
 
 import java.util.stream.Stream;
 
-public class Filter {
+/** Utility class for filtering board games by string or numeric criteria. */
+public final class Filter {
 
+    /** Private constructor to prevent instantiation of this utility class. */
+    private Filter() {
+    }
+
+    /**
+     * Filters a stream of games by a string column and operation.
+     *
+     * @param games the stream of games to filter
+     * @param col   the column to filter on
+     * @param op    the comparison operation
+     * @param value the value to compare against
+     * @return filtered stream of games
+     */
     public static Stream<BoardGame> stringFilter(Stream<BoardGame> games, GameData col,
             Operations op, String value) {
         return games.filter(game -> {
             String actual = game.getName();
-            if (op == Operations.EQUALS) return actual.equalsIgnoreCase(value);
-            if (op == Operations.NOT_EQUALS) return !actual.equalsIgnoreCase(value);
-            if (op == Operations.CONTAINS) return actual.toLowerCase().contains(value.toLowerCase());
+            if (op == Operations.EQUALS) {
+                return actual.equalsIgnoreCase(value);
+            }
+            if (op == Operations.NOT_EQUALS) {
+                return !actual.equalsIgnoreCase(value);
+            }
+            if (op == Operations.CONTAINS) {
+                return actual.toLowerCase().contains(value.toLowerCase());
+            }
             return true;
         });
     }
 
+    /**
+     * Filters a stream of games by a numeric column and operation.
+     *
+     * @param games the stream of games to filter
+     * @param col   the column to filter on
+     * @param op    the comparison operation
+     * @param value the numeric value to compare against
+     * @return filtered stream of games
+     */
     public static Stream<BoardGame> numberFilter(Stream<BoardGame> games, GameData col,
             Operations op, double value) {
         return games.filter(game -> {
@@ -30,12 +59,24 @@ public class Filter {
                 case YEAR: actual = game.getYearPublished(); break;
                 default: return true;
             }
-            if (op == Operations.EQUALS) return actual == value;
-            if (op == Operations.NOT_EQUALS) return actual != value;
-            if (op == Operations.GREATER_THAN) return actual > value;
-            if (op == Operations.LESS_THAN) return actual < value;
-            if (op == Operations.GREATER_THAN_EQUALS) return actual >= value;
-            if (op == Operations.LESS_THAN_EQUALS) return actual <= value;
+            if (op == Operations.EQUALS) {
+                return actual == value;
+            }
+            if (op == Operations.NOT_EQUALS) {
+                return actual != value;
+            }
+            if (op == Operations.GREATER_THAN) {
+                return actual > value;
+            }
+            if (op == Operations.LESS_THAN) {
+                return actual < value;
+            }
+            if (op == Operations.GREATER_THAN_EQUALS) {
+                return actual >= value;
+            }
+            if (op == Operations.LESS_THAN_EQUALS) {
+                return actual <= value;
+            }
             return true;
         });
     }

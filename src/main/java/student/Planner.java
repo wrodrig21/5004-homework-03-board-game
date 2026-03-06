@@ -78,23 +78,28 @@ public class Planner implements IPlanner {
             case YEAR: comp = Comparator.comparingInt(BoardGame::getYearPublished); break;
             default: comp = Comparator.comparing(BoardGame::getName, String.CASE_INSENSITIVE_ORDER); break;
         }
-        if (!ascending) comp = comp.reversed();
+        if (!ascending) {
+            comp = comp.reversed();
+        }
         return filtered.stream().sorted(comp);
     }
 
     private Stream<BoardGame> filterSingle(String filter, Stream<BoardGame> filteredGames) {
         Operations operator = Operations.getOperatorFromStr(filter);
-        if (operator == null) return filteredGames;
-        filter = filter.replaceAll(" ", "");
-        String[] parts = filter.split(operator.getOperator());
-        if (parts.length != 2) return filteredGames;
+        if (operator == null) {
+            return filteredGames;
+        }
+        String[] parts = filter.split(operator.getOperator(), 2);
+        if (parts.length != 2) {
+            return filteredGames;
+        }
         GameData column;
         try {
-            column = GameData.fromString(parts[0]);
+            column = GameData.fromString(parts[0].trim().replaceAll(" ", ""));
         } catch (IllegalArgumentException e) {
             return filteredGames;
         }
-        String value = parts[1];
+        String value = parts[1].trim();
         if (column == GameData.NAME) {
             return Filter.stringFilter(filteredGames, column, operator, value);
         }

@@ -11,6 +11,7 @@ import java.util.stream.Stream;
  */
 public class GameList implements IGameList {
 
+    /** The list of board games. */
     private List<BoardGame> games;
 
     /**
@@ -77,7 +78,9 @@ public class GameList implements IGameList {
 
         if (str.equalsIgnoreCase(ADD_ALL)) {
             for (BoardGame g : filteredList) {
-                if (!games.contains(g)) games.add(g);
+                if (!games.contains(g)) {
+                    games.add(g);
+                }
             }
         } else if (str.matches("\\d+-\\d+")) {
             String[] range = str.split("-");
@@ -87,7 +90,9 @@ public class GameList implements IGameList {
                 throw new IllegalArgumentException("range out of bounds");
             }
             for (int i = start; i < end; i++) {
-                if (!games.contains(filteredList.get(i))) games.add(filteredList.get(i));
+                if (!games.contains(filteredList.get(i))) {
+                    games.add(filteredList.get(i));
+                }
             }
         } else if (str.matches("\\d+")) {
             int i = Integer.parseInt(str) - 1;
@@ -102,7 +107,9 @@ public class GameList implements IGameList {
             for (BoardGame g : filteredList) {
                 if (g.getName().equalsIgnoreCase(str)) {
                     found = true;
-                    if (!games.contains(g)) games.add(g);
+                    if (!games.contains(g)) {
+                        games.add(g);
+                    }
                 }
             }
             if (!found) {
